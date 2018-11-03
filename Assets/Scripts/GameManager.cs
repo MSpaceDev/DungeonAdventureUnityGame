@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-	// Update is called once per frame
-	void Update () {
+    private void Awake()
+    {
+        Cursor.visible = false;
+    }
+
+    // Update is called once per frame
+    void Update () {
         
     }
 }

@@ -6,6 +6,8 @@ public class Enemy : MonoBehaviour {
 
     public float movementSpeed = 100.0f;
     public float attackTimeInSeconds = 1.0f;
+    public GameObject[] splats;
+    public GameObject deathPS;
 
     float attackTimer;
 
@@ -46,10 +48,25 @@ public class Enemy : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "PlayerWeapon")
+        PlayerWeapon playerWeapon = collision.gameObject.GetComponentInParent<PlayerWeapon>();
+
+        if (!playerWeapon || !playerWeapon.isWeaponMoving)
+            return;
+
+        GameObject splatPS = Instantiate(deathPS, transform.position, Random.rotation);
+        
+        for (int i = 0; i <= 3; i++)
         {
-            // Enemy death here
-            Destroy(gameObject);
+            Vector2 spawnPos = new Vector2(
+                    transform.position.x + Random.Range(-0.2f, 0.2f),
+                    transform.position.y + Random.Range(-0.2f, 0.2f)
+                );
+
+            GameObject splat = Instantiate(splats[Random.Range(0, splats.Length)], spawnPos, Random.rotation);
+            splat.transform.rotation = Quaternion.Euler(0, 0, splat.transform.rotation.z);
         }
+
+        Destroy(splatPS, 3.0f);
+        Destroy(gameObject);
     }
 }
