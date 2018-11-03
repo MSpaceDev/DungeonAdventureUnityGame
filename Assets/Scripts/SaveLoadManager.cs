@@ -21,6 +21,8 @@ public class SaveLoadManager : MonoBehaviour {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream stream = new FileStream(Application.persistentDataPath + "/player.dat", FileMode.Create);
         bf.Serialize(stream, new PlayerStats(position, coins));
+
+        stream.Close();
     }
 
     public void Load(out Vector2 position, out int coins)
@@ -33,6 +35,8 @@ public class SaveLoadManager : MonoBehaviour {
 
             position = new Vector2(playerStats.xPos, playerStats.yPos);
             coins = playerStats.coins;
+
+            stream.Close();
         }
         else
         {
