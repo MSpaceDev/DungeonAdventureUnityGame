@@ -42,6 +42,16 @@ public class PlayerWeapon : MonoBehaviour {
         directionToCursor.z = 0;
         Quaternion pivotRot = Quaternion.LookRotation(directionToCursor.normalized);
 
-        weaponPivot.localRotation = pivotRot;
+        // If player is flipped, invert angles from pivotRot so weapon to cursor stays the same
+        if (Player.instance.PlayerMovement.isFlipped)
+        {
+            weaponPivot.localRotation = Quaternion.Euler((pivotRot.eulerAngles.x - 180) % 360, (pivotRot.eulerAngles.y - 180) % 360, (pivotRot.eulerAngles.z - 180) % 360);
+            weaponPivot.localScale = new Vector3(weaponPivot.localScale.x, weaponPivot.localScale.y, -Mathf.Abs(weaponPivot.localScale.z));
+        }
+        else
+        {
+            weaponPivot.localRotation = pivotRot;
+            weaponPivot.localScale = new Vector3(weaponPivot.localScale.x, weaponPivot.localScale.y, Mathf.Abs(weaponPivot.localScale.z));
+        }
     }
 }

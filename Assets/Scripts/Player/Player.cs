@@ -6,6 +6,10 @@ public class Player : MonoBehaviour {
 
     public static Player instance;
 
+    public PlayerMovement PlayerMovement { get; set; }
+    public PlayerAttack PlayerAttack { get; set; }
+    public PlayerWeapon PlayerWeapon { get; set; }
+
     public int health = 6;
 
     int coins;
@@ -17,6 +21,13 @@ public class Player : MonoBehaviour {
             instance = this;
         else if (instance != this)
             Destroy(gameObject);
+    }
+
+    private void Start()
+    {
+        PlayerAttack = GetComponent<PlayerAttack>();
+        PlayerMovement = GetComponent<PlayerMovement>();
+        PlayerWeapon = GetComponent<PlayerWeapon>();
     }
 
     private void Update()

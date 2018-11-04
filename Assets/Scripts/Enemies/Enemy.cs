@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
+    [Header("Enemy Traits")]
     public float movementSpeed = 100.0f;
     public float attackTimeInSeconds = 1.0f;
+    public float detectRange = 5.0f;
+    public float attackDistance = 0.5f;
+
+    [Header("Reference Game Objects")]
     public GameObject[] splats;
     public GameObject deathPS;
 
@@ -28,14 +33,24 @@ public class Enemy : MonoBehaviour {
 
     protected virtual void MoveToPlayer()
     {
-        float distanceToPlayer = (transform.position - player.transform.position).magnitude;
+        Vector2 directionToPlayer = player.transform.position - transform.position;
+        float distanceToPlayer = directionToPlayer.magnitude;
 
-        if (distanceToPlayer > player.transform.localScale.x)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer.normalized, detectRange);
+
+        if (hit.collider != null && hit.collider.gameObject.tag != "Player")
         {
+            // Idle
+            return;
+        }
+        else if (distanceToPlayer > attackDistance)
+        { 
+            // Move
             transform.position = Vector2.MoveTowards(transform.position, player.transform.position, movementSpeed * Time.deltaTime);
         }
         else
         {
+            // Attack
             attackTimer += Time.deltaTime;
 
             if (attackTimer > attackTimeInSeconds)
